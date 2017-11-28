@@ -16,7 +16,7 @@ public class QuizController {
 	}
 	
 	@RequestMapping(value = {"", "/"})
-	public String getJokes(Model model) {
+	public String getQuestion(Model model) {
 		model.addAttribute("question", quizService.getQuestion());
 		System.out.println(System.currentTimeMillis() + " new question");
 		return "friendsquiz";

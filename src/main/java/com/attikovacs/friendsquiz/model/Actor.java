@@ -8,12 +8,6 @@ public class Actor {
 	
 	private Gender gender;
 
-//	public Actor(String name, String role, Gender gender) {
-//		this.name = name;
-//		this.role = role;
-//		this.gender = gender;
-//	}
-	
 	public String getName() {
 		return name;
 	}
@@ -38,8 +32,4 @@ public class Actor {
 		this.gender = gender;
 	}
 	
-	@Override
-	public String toString() {
-		return this.name + " " + this.role + " " + this.gender;
-	}
 }
