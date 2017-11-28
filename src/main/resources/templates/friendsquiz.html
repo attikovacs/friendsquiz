@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"> -->
+
+    <title>Friends Quiz</title>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css" 
+	th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen"/>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		function checkAnswer(element) {
+	    	var index = /*[[${question.correctIndex}]]*/ 0;
+	    	if (element.id == index && element.className.indexOf('success') < 0) {
+	    		element.className = element.className + " list-group-item-success";
+	    		setTimeout(function() {
+    			   window.location.reload(1);
+    			}, 1000);
+	    	}
+	    	if (element.id != index && element.className.indexOf('danger') < 0) {
+	    		element.className = element.className + " list-group-item-danger";
+	    	}
+		}
+	/*]]>*/
+	</script>
+	
+</head>
+<body>
+<div>&nbsp;</div>
+<!-- style="margin:20px;"  -->
+<img class="img-responsive center-block" src="friends-logo.jpg" />
+<div>&nbsp;</div>
+<div class="container theme-showcase" role="main">
+	<div class="text-center page-header">
+	  <h1 th:text="${question.question}">Friends quiz game</h1>
+	</div>
+	
+	<div class="list-group">
+<!-- 	  <a href="javascript:;" class="text-center list-group-item list-group-item-action active" th:text="${question.question}">Header</a> -->
+	  <a th:each="answer,iter : ${question.answers}" th:id="${iter.index}" href="javascript:;" onClick="checkAnswer(this);" class="text-center list-group-item" th:text="${answer}">answer</a>
+	</div>
+	
+	<p class="text-center">
+	  <a th:href="${'/'}" class="btn btn-lg btn-primary" role="button">Next</a>
+	</p>
+
+</div>
+</body>
+</html>
