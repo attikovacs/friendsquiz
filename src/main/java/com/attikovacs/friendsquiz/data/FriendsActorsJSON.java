@@ -1,13 +1,11 @@
 package com.attikovacs.friendsquiz.data;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.attikovacs.friendsquiz.model.Actor;
@@ -17,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class FriendsActorsJSON {
-
+	
 	private final int ANSWERS = 4;
 	
 	private final int MAXTRIES = 100;
@@ -28,9 +26,15 @@ public class FriendsActorsJSON {
     	actors = new ArrayList<>();
 		try {
 			ObjectMapper jsonMapper = new ObjectMapper();
-			Resource resource = new ClassPathResource("actors.json");
-			InputStream resourceInputStream = resource.getInputStream();
-			actors = jsonMapper.readValue(resourceInputStream, new TypeReference<List<Actor>>() {});
+
+//			it works if the actors.json is put next to the pom.xml file (or next to the jar file if there is one runnable jar - it will not contain the json file)
+			actors = jsonMapper.readValue(new FileInputStream("actors.json"), new TypeReference<List<Actor>>() {});
+
+//			it works if the actors.json is put under resources (the runnable jar file will contain the json file as well)
+//			Resource resource = new ClassPathResource("actors.json");
+//			InputStream resourceInputStream = resource.getInputStream();
+//			actors = jsonMapper.readValue(resourceInputStream, new TypeReference<List<Actor>>() {});
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -63,7 +67,7 @@ public class FriendsActorsJSON {
         question.setQuestion(actor.getRole());
         question.setAnswers(answers);
         question.setCorrectIndex(correctIndex);
-
+        
         return question;
     }
 	
