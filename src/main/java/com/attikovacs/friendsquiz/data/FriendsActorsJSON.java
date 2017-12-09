@@ -2,10 +2,13 @@ package com.attikovacs.friendsquiz.data;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.attikovacs.friendsquiz.model.Actor;
@@ -24,20 +27,24 @@ public class FriendsActorsJSON {
 	
     public FriendsActorsJSON() {
     	actors = new ArrayList<>();
-		try {
 			ObjectMapper jsonMapper = new ObjectMapper();
 
 //			it works if the actors.json is put next to the pom.xml file (or next to the jar file if there is one runnable jar - it will not contain the json file)
-			actors = jsonMapper.readValue(new FileInputStream("actors.json"), new TypeReference<List<Actor>>() {});
+			try (FileInputStream actorsStream = new FileInputStream("actors.json")) {
+				actors = jsonMapper.readValue(actorsStream, new TypeReference<List<Actor>>() {});
+			} catch (IOException e) {
+				// Since it is a Component's constructor the application will not be able to start if the actors.json does not exist.
+				throw new RuntimeException("actors.json does not exist", e);
+			}
 
 //			it works if the actors.json is put under resources (the runnable jar file will contain the json file as well)
 //			Resource resource = new ClassPathResource("actors.json");
-//			InputStream resourceInputStream = resource.getInputStream();
-//			actors = jsonMapper.readValue(resourceInputStream, new TypeReference<List<Actor>>() {});
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//			try (InputStream resourceInputStream = resource.getInputStream()) {
+//				actors = jsonMapper.readValue(resourceInputStream, new TypeReference<List<Actor>>() {});
+//			} catch (IOException e) {
+//				// Since it is a Component's constructor the application will not be able to start if the actors.json does not exist.
+//				throw new RuntimeException("actors.json does not exist", e);
+//			}
     }
 
     public Question getRandomQuestion(){
